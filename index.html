@@ -54,8 +54,10 @@
                     </div>
                     <h2>Time left: <span id="controlTimeLeft">00:00</span></h2>
                     <div class="time-input-box">
-                        <label for="timeInput">Set Time (mm:ss): </label>
-                        <input type="time" id="timeInput" step="1">
+                        <label for="timeInputHours">Set Time (hh:mm:ss): </label>
+                        <input type="number" id="timeInputHours" min="0" max="23" placeholder="hh" style="width: 50px;">
+                        <input type="number" id="timeInputMinutes" min="0" max="59" placeholder="mm" style="width: 50px;">
+                        <input type="number" id="timeInputSeconds" min="0" max="59" placeholder="ss" style="width: 50px;">
                         <button class="button-29" onclick="setTime()">Set Time</button>
                     </div>
                     <div class="control-buttons">
