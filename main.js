@@ -124,8 +124,10 @@ function init() {
     
     // Listen for time value changes
     timeRef.on('value', (snapshot) => {
-        const time = snapshot.val().time;
-        document.getElementById('timeLeft').innerText = formatTime(time);
+        const time = snapshot.val();
+        const formattedTime = formatTime(time);
+        document.getElementById('timeLeft').innerText = formattedTime;
+        document.getElementById('controlTimeLeft').innerText = formattedTime;
     });
 
     show('home');
