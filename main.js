@@ -140,6 +140,14 @@ function formatTime(seconds) {
     return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
 }
 
+// Function to set time from mm:ss input
+function setTime() {
+    const timeInput = document.getElementById('timeInput').value;
+    const [minutes, seconds] = timeInput.split(':').map(Number);
+    const totalSeconds = (minutes * 60) + seconds;
+    firebase.database().ref('time').set({ time: totalSeconds });
+}
+
 // Highcharts configuration for ADC auto chart
 var colors = ['#470ce8'];
 var chartADC_auto = new Highcharts.Chart({
