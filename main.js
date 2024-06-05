@@ -99,26 +99,50 @@ function init() {
         }
     });
 
-    // Reference to the setpoint value in the database
-    const setpointRef = database.ref('control/setpoint');
+    // Reference to the acetone setpoint value in the database
+    const acetoneSetpointRef = database.ref('control/acetoneSetpoint');
     
-    // Listen for setpoint value changes
-    setpointRef.on('value', (snapshot) => {
-        const setpoint = snapshot.val().setpoint;
-        document.getElementById('currentSetPoint').innerText = setpoint.toFixed(2);
-        chartADC_auto.yAxis[0].removePlotLine('setpoint-line');
+    // Listen for acetone setpoint value changes
+    acetoneSetpointRef.on('value', (snapshot) => {
+        const acetoneSetpoint = snapshot.val().setpoint;
+        document.getElementById('currentSetPoint').innerText = acetoneSetpoint.toFixed(2);
+        chartADC_auto.yAxis[0].removePlotLine('acetone-setpoint-line');
         chartADC_auto.yAxis[0].addPlotLine({
-            id: 'setpoint-line',
-            value: setpoint,
+            id: 'acetone-setpoint-line',
+            value: acetoneSetpoint,
             color: 'red',
             dashStyle: 'Dash',
             width: 2,
             label: {
-                text: 'Setpoint: ' + setpoint.toFixed(2) + '°C',
+                text: 'Acetone Setpoint: ' + acetoneSetpoint.toFixed(2) + '°C',
                 align: 'right',
-                verticalAlign: 'bottom', // Set the vertical alignment to bottom
+                verticalAlign: 'bottom',
                 style: {
                     color: 'red'
+                }
+            }
+        });
+    });
+
+    // Reference to the heater setpoint value in the database
+    const heaterSetpointRef = database.ref('control/heaterSetpoint');
+    
+    // Listen for heater setpoint value changes
+    heaterSetpointRef.on('value', (snapshot) => {
+        const heaterSetpoint = snapshot.val().setpoint;
+        chartADC_auto.yAxis[0].removePlotLine('heater-setpoint-line');
+        chartADC_auto.yAxis[0].addPlotLine({
+            id: 'heater-setpoint-line',
+            value: heaterSetpoint,
+            color: 'blue',
+            dashStyle: 'Dash',
+            width: 2,
+            label: {
+                text: 'Heater Setpoint: ' + heaterSetpoint.toFixed(2) + '°C',
+                align: 'right',
+                verticalAlign: 'bottom',
+                style: {
+                    color: 'blue'
                 }
             }
         });
@@ -139,6 +163,7 @@ function init() {
 }
 
 
+
 // Function to format time from seconds to hh:mm:ss
 function formatTime(seconds) {
     const hours = Math.floor(seconds / 3600);
@@ -157,7 +182,7 @@ function setTime() {
 }
 
 // Highcharts configuration for ADC auto chart
-var colors = ['#470ce8', '#e80c47']; // Add color for the new series
+var colors = ['#470ce8', '#e80c47']; // Existing colors for the series
 var chartADC_auto = new Highcharts.Chart({
     chart: { renderTo: 'chart-ADC_auto' },
     title: { text: 'Temperature Control' },
@@ -182,23 +207,40 @@ var chartADC_auto = new Highcharts.Chart({
         title: { text: 'Temperature [°C]' },
         min: 10,
         max: 50,
-        plotLines: [{
-            id: 'setpoint-line',
-            color: 'red',
-            dashStyle: 'Dash',
-            width: 2,
-            label: {
-                text: 'Setpoint',
-                align: 'right',
-                verticalAlign: 'bottom', // Set the vertical alignment to bottom
-                style: {
-                    color: 'red'
+        plotLines: [
+            {
+                id: 'acetone-setpoint-line',
+                color: 'red',
+                dashStyle: 'Dash',
+                width: 2,
+                label: {
+                    text: 'Acetone Setpoint',
+                    align: 'right',
+                    verticalAlign: 'bottom',
+                    style: {
+                        color: 'red'
+                    }
+                }
+            },
+            {
+                id: 'heater-setpoint-line',
+                color: 'blue',
+                dashStyle: 'Dash',
+                width: 2,
+                label: {
+                    text: 'Heater Setpoint',
+                    align: 'right',
+                    verticalAlign: 'bottom',
+                    style: {
+                        color: 'blue'
+                    }
                 }
             }
-        }]
+        ]
     },
     credits: { enabled: false }
 });
+
 
 
 function btn_control(action) {
