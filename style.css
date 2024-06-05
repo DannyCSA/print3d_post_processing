@@ -50,7 +50,7 @@ html{
 body{
     width: 100vw;
     height: 100vh;
-    font-family: poppins, sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 0.88rem;
     background: var(--color-background);
     user-select: none;
@@ -67,17 +67,10 @@ img {
     grid-template-columns: 14rem auto 23rem;
     width: 96%;
     margin: 0 auto;
-    /*background: red;*/
     gap: 1.8rem;
-    
-    
 }
 
-/*boton global*/
-
-/* CSS */
-
-.button-29 {
+.button-29, .button-st {
   align-items: center;
   appearance: none;
   background-image: radial-gradient(100% 100% at 100% 0, #5adaff 0, #5468ff 100%);
@@ -88,7 +81,7 @@ img {
   color: #fff;
   cursor: pointer;
   display: inline-flex;
-  font-family: "JetBrains Mono",monospace;
+  font-family: 'Poppins', sans-serif;
   height: 48px;
   justify-content: center;
   line-height: 1;
@@ -108,65 +101,37 @@ img {
   font-size: 18px;
 }
 
-.button-29:focus {
+.button-29:focus, .button-st:focus {
   box-shadow: #3c4fe0 0 0 0 1.5px inset, rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
 }
 
-.button-29:hover {
+.button-29:hover, .button-st:hover {
   box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
   transform: translateY(-2px);
 }
 
-.button-29:active {
+.button-29:active, .button-st:active {
   box-shadow: #3c4fe0 0 3px 7px inset;
   transform: translateY(2px);
 }
 
 .button-st {
-    align-items: center;
-    appearance: none;
-    background-image: radial-gradient(100% 100% at 100% 0, #ff5a5a 0, #f11000 100%);
-    border: 0;
-    border-radius: 6px;
-    box-shadow: rgba(45, 35, 66, .4) 0 2px 4px,rgba(45, 35, 66, .3) 0 7px 13px -3px,rgba(58, 65, 111, .5) 0 -3px 0 inset;
-    box-sizing: border-box;
-    color: #fff;
-    cursor: pointer;
-    display: inline-flex;
-    font-family: "JetBrains Mono",monospace;
-    height: 48px;
-    justify-content: center;
-    line-height: 1;
-    list-style: none;
-    overflow: hidden;
-    padding-left: 16px;
-    padding-right: 16px;
-    position: relative;
-    text-align: left;
-    text-decoration: none;
-    transition: box-shadow .15s,transform .15s;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    white-space: nowrap;
-    will-change: box-shadow,transform;
-    font-size: 18px;
-  }
-  
-  .button-st:focus {
-    box-shadow: #7e0000 0 0 0 1.5px inset, rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #e03c3c 0 -3px 0 inset;
-  }
-  
-  .button-st:hover {
-    box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #9b0000 0 -3px 0 inset;
-    transform: translateY(-2px);
-  }
-  
-  .button-st:active {
-    box-shadow: #e03c3c 0 3px 7px inset;
-    transform: translateY(2px);
-  }
-  
+  background-image: radial-gradient(100% 100% at 100% 0, #ff5a5a 0, #f11000 100%);
+}
+
+.button-st:focus {
+  box-shadow: #7e0000 0 0 0 1.5px inset, rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #e03c3c 0 -3px 0 inset;
+}
+
+.button-st:hover {
+  box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #9b0000 0 -3px 0 inset;
+  transform: translateY(-2px);
+}
+
+.button-st:active {
+  box-shadow: #e03c3c 0 3px 7px inset;
+  transform: translateY(2px);
+}
 
 a {
     color: var(--color-dark)
@@ -193,7 +158,6 @@ small{
     font-size: 0.75rem;
 }
 
-
 .text-muted {
     color: var(--color-info-dark);
 }
@@ -218,14 +182,11 @@ b {
     color: var(--color-success);
 }
 
-
 aside {
     height: 100vh;
-  
 }
 
 aside .top {
-
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -233,9 +194,7 @@ aside .top {
 }
 aside .logo {
     display: flex;
-    
     gap: 0.8rem;
-
 }
 aside .logo img {
     width: 2rem;
@@ -245,12 +204,7 @@ aside .close {
     display: none;
 }
 
-/* aquí comienza el diseño para la barra izquierda */
-
-
-
 aside .sidebar {
-
     display: flex;
     flex-direction: column;
     height: 86vh;
@@ -310,10 +264,7 @@ aside .sidebar .message-count {
     border-radius: var(--border-radius-1);
 }
 
-/*para la parte del Main*/
-
 .general-box {
-    
     background: var(--color-white);
     padding: var(--card-padding);
     border-radius: var(--card-border-radius);
@@ -326,13 +277,9 @@ aside .sidebar .message-count {
     box-shadow: none;
 }
 
-
 main {
     margin-top: 1.4rem;
 }
-
-
-/*para la barra derecha */
 
 .right {
     margin-top: 1.4rem;
@@ -341,7 +288,6 @@ main {
     display: flex;
     justify-content: end;
     gap: 2rem;
-  
 }
 
 .right .top button {
@@ -378,7 +324,6 @@ main {
     margin-right: 2rem;
 }
 
-/*developers section */
 .profile-foto{
     width: 2.8rem;
     height: 2.8rem;
@@ -400,7 +345,6 @@ main {
 }
 
 @media screen and (max-width: 1200px){
-    
     .container {
         width: 94%;
         grid-template-columns: 7rem auto 23rem;
@@ -412,7 +356,6 @@ main {
 
     aside .sidebar h3 {
         display: none;
-
     }
     aside .sidebar a {
         width: 5.5rem;
@@ -446,7 +389,6 @@ main {
     @keyframes showMenu {
         to {
             left: 0;
-
         }
     }
     aside .logo {
@@ -471,7 +413,6 @@ main {
     main {
         margin-top: 8rem;
         padding: 0 1rem;
-
     }
     
     .right {
@@ -498,7 +439,6 @@ main {
         width: 4.4rem;
         position: absolute;
         left: 66%;
-
     }
     .right .profile .info {
         display: none;
@@ -519,4 +459,19 @@ main {
     .right .top button span {
         font-size: 2rem;
     }
+}
+
+.time-input-box {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+.time-input {
+    width: 3rem;
+    text-align: center;
+    border-radius: 0.4rem;
+    background: var(--color-info-light);
+    color: var(--color-dark);
+    font-family: 'Poppins', sans-serif;
 }

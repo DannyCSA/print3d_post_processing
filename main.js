@@ -124,8 +124,10 @@ function init() {
     
     // Listen for time value changes
     timeRef.on('value', (snapshot) => {
-        const time = snapshot.val();
-        const formattedTime = formatTime(time);
+        const time = snapshot.val().time;
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
+        const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         document.getElementById('timeLeft').innerText = formattedTime;
         document.getElementById('controlTimeLeft').innerText = formattedTime;
     });
@@ -133,19 +135,11 @@ function init() {
     show('home');
 }
 
-// Function to format time from seconds to hh:mm:ss
-function formatTime(seconds) {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const remainingSeconds = seconds % 60;
-    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
-}
-
-// Function to set time from hh:mm:ss input
 function setTime() {
-    const hours = parseInt(document.getElementById('timeInputHours').value) || 0;
-    const minutes = parseInt(document.getElementById('timeInputMinutes').value) || 0;
-    const seconds = parseInt(document.getElementById('timeInputSeconds').value) || 0;
+    const hours = parseInt(document.getElementById('timeInputHours').value || 0);
+    const minutes = parseInt(document.getElementById('timeInputMinutes').value || 0);
+    const seconds = parseInt(document.getElementById('timeInputSeconds').value || 0);
+
     const totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
     firebase.database().ref('time').set({ time: totalSeconds });
 }
