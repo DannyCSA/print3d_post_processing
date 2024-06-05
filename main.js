@@ -120,7 +120,7 @@ function init() {
     });
 
     // Reference to the time value in the database
-    const timeRef = database.ref('time');
+    const timeRef = database.ref('time/time');
     
     // Listen for time value changes
     timeRef.on('value', (snapshot) => {
