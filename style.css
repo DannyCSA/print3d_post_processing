@@ -81,7 +81,7 @@ img {
   color: #fff;
   cursor: pointer;
   display: inline-flex;
-  font-family: "Poppins", sans-serif;
+  font-family: "JetBrains Mono",monospace;
   height: 48px;
   justify-content: center;
   line-height: 1;
@@ -126,7 +126,7 @@ img {
     color: #fff;
     cursor: pointer;
     display: inline-flex;
-    font-family: "Poppins", sans-serif;
+    font-family: "JetBrains Mono",monospace;
     height: 48px;
     justify-content: center;
     line-height: 1;
@@ -144,7 +144,7 @@ img {
     white-space: nowrap;
     will-change: box-shadow,transform;
     font-size: 18px;
-}
+  }
   
 .button-st:focus {
     box-shadow: #7e0000 0 0 0 1.5px inset, rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #e03c3c 0 -3px 0 inset;
@@ -159,7 +159,7 @@ img {
     box-shadow: #e03c3c 0 3px 7px inset;
     transform: translateY(2px);
 }
-  
+
 a {
     color: var(--color-dark)
 }
@@ -393,6 +393,7 @@ main {
     main .home .insights { 
         grid-template-columns: 1fr;
     }
+    
 }
 @media screen and (max-width: 768px) {
     .container {
@@ -559,18 +560,28 @@ main .home .insights h2 {
     color: black;
 }
 
-.time-input-container {
+.time-input-box {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 0.5rem;
-    margin: 1rem 0;
+    margin-bottom: 1rem;
 }
 
-#timeInput {
-    font-family: poppins, sans-serif;
-    font-size: 1rem;
+.time-input-box label {
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--color-dark);
+}
+
+.time-input {
+    width: 50px;
     padding: 0.5rem;
-    border-radius: 0.5rem;
     border: 1px solid var(--color-info-dark);
+    border-radius: 0.4rem;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.time-input-box .button-29 {
+    margin-left: 1rem;
 }
