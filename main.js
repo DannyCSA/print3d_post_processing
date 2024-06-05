@@ -77,20 +77,25 @@ function init() {
 
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
-    
-    // Reference to the temperature value in the database
+
+    // Reference to the temperature values in the database
     const tempRef = database.ref('temperature');
-    
+
     // Listen for temperature value changes
     tempRef.on('value', (snapshot) => {
         const temperature = snapshot.val().temperature;
+        const acetoneTemperature = snapshot.val().acetoneTemperature;
+
         document.getElementById('currentTemperature').innerText = temperature.toFixed(2);
 
-        var x = (new Date()).getTime(), y = parseFloat(temperature);
+        var x = (new Date()).getTime(), y1 = parseFloat(temperature), y2 = parseFloat(acetoneTemperature);
+        
         if (chartADC_auto.series[0].data.length > 40) {
-            chartADC_auto.series[0].addPoint([x, y], true, true, true);
+            chartADC_auto.series[0].addPoint([x, y1], true, true, true);
+            chartADC_auto.series[1].addPoint([x, y2], true, true, true);
         } else {
-            chartADC_auto.series[0].addPoint([x, y], true, false, true);
+            chartADC_auto.series[0].addPoint([x, y1], true, false, true);
+            chartADC_auto.series[1].addPoint([x, y2], true, false, true);
         }
     });
 
@@ -133,6 +138,7 @@ function init() {
     show('home');
 }
 
+
 // Function to format time from seconds to hh:mm:ss
 function formatTime(seconds) {
     const hours = Math.floor(seconds / 3600);
@@ -151,13 +157,17 @@ function setTime() {
 }
 
 // Highcharts configuration for ADC auto chart
-var colors = ['#470ce8'];
+var colors = ['#470ce8', '#e80c47']; // Add color for the new series
 var chartADC_auto = new Highcharts.Chart({
     chart: { renderTo: 'chart-ADC_auto' },
     title: { text: 'Temperature Control' },
     series: [{
         data: [],
         name: 'Heater Temperature'
+    },
+    {
+        data: [],
+        name: 'Acetone Temperature'
     }],
     colors: colors,
     plotOptions: {
@@ -189,6 +199,7 @@ var chartADC_auto = new Highcharts.Chart({
     },
     credits: { enabled: false }
 });
+
 
 function btn_control(action) {
     const control = action === 'control-start' ? true : false;
