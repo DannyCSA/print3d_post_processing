@@ -119,7 +119,23 @@ function init() {
         });
     });
 
+    // Reference to the time value in the database
+    const timeRef = database.ref('time');
+    
+    // Listen for time value changes
+    timeRef.on('value', (snapshot) => {
+        const time = snapshot.val().time;
+        document.getElementById('timeLeft').innerText = formatTime(time);
+    });
+
     show('home');
+}
+
+// Function to format time from seconds to mm:ss
+function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
 }
 
 // Highcharts configuration for ADC auto chart
