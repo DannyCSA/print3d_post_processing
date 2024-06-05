@@ -125,23 +125,10 @@ function init() {
     // Listen for time value changes
     timeRef.on('value', (snapshot) => {
         const time = snapshot.val().time;
-        const minutes = Math.floor(time / 60);
-        const seconds = time % 60;
-        const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        document.getElementById('timeLeft').innerText = formattedTime;
-        document.getElementById('controlTimeLeft').innerText = formattedTime;
+        document.getElementById('timeLeft').innerText = formatTime(time);
     });
 
     show('home');
-}
-
-function setTime() {
-    const hours = parseInt(document.getElementById('timeInputHours').value || 0);
-    const minutes = parseInt(document.getElementById('timeInputMinutes').value || 0);
-    const seconds = parseInt(document.getElementById('timeInputSeconds').value || 0);
-
-    const totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
-    firebase.database().ref('time').set({ time: totalSeconds });
 }
 
 // Highcharts configuration for ADC auto chart
@@ -197,6 +184,20 @@ function btn_test(action) {
 
 function btn_emergency_stop() {
     firebase.database().ref('stop').set({ stop: true });
+}
+
+function setTime() {
+    const timeInput = document.getElementById('timeInput').value;
+    const [hours, minutes, seconds] = timeInput.split(':').map(Number);
+    const totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
+
+    firebase.database().ref('time').set({ time: totalSeconds });
+}
+
+function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
 }
 
 window.onload = init;

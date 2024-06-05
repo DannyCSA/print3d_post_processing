@@ -46,20 +46,16 @@
             </div>
             <div class="control">
                 <h1>Control Post-Processing System</h1>
-                <h2>Time left: <span id="controlTimeLeft">00:00</span></h2>
-                <div class="time-input-box">
-                    <input type="number" id="timeInputHours" class="time-input" placeholder="HH" min="0">
-                    <span>:</span>
-                    <input type="number" id="timeInputMinutes" class="time-input" placeholder="MM" min="0" max="59">
-                    <span>:</span>
-                    <input type="number" id="timeInputSeconds" class="time-input" placeholder="SS" min="0" max="59">
-                    <button class="button-29" onclick="setTime()">Set Time</button>
-                </div>
                 <div class="general-box">
                     <h2>Heater Set Point</h2>
                     <div class="slider-box">
                         <input type="range" onchange="updateSliderPWMcontrol(this)" id="slider1" min="15" max="45" step="1" value="0" class="slider">
                         <h2 id="sliderValue1">15</h2>
+                    </div>
+                    <h2>Time Left: <span id="timeLeftControl">00:00</span></h2>
+                    <div class="time-input-container">
+                        <input type="time" id="timeInput" step="1">
+                        <button class="button-29" onclick="setTime()">Set Time</button>
                     </div>
                     <div class="control-buttons">
                         <button class="button-29" onclick="btn_control('control-start')">START</button>  
