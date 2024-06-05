@@ -143,8 +143,8 @@ function formatTime(seconds) {
 // Function to set time from mm:ss input
 function setTime() {
     const timeInput = document.getElementById('timeInput').value;
-    const [minutes, seconds] = timeInput.split(':').map(Number);
-    const totalSeconds = (minutes * 60) + seconds;
+    const [hours, minutes] = timeInput.split(':').map(Number);
+    const totalSeconds = (hours * 3600) + (minutes * 60);
     firebase.database().ref('time').set({ time: totalSeconds });
 }
 
