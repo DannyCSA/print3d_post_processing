@@ -77,72 +77,43 @@ function init() {
 
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
-
-    // Reference to the temperature values in the database
+    
+    // Reference to the temperature value in the database
     const tempRef = database.ref('temperature');
-
+    
     // Listen for temperature value changes
     tempRef.on('value', (snapshot) => {
         const temperature = snapshot.val().temperature;
-        const acetoneTemperature = snapshot.val().acetoneTemperature;
-
         document.getElementById('currentTemperature').innerText = temperature.toFixed(2);
 
-        var x = (new Date()).getTime(), y1 = parseFloat(temperature), y2 = parseFloat(acetoneTemperature);
-        
+        var x = (new Date()).getTime(), y = parseFloat(temperature);
         if (chartADC_auto.series[0].data.length > 40) {
-            chartADC_auto.series[0].addPoint([x, y1], true, true, true);
-            chartADC_auto.series[1].addPoint([x, y2], true, true, true);
+            chartADC_auto.series[0].addPoint([x, y], true, true, true);
         } else {
-            chartADC_auto.series[0].addPoint([x, y1], true, false, true);
-            chartADC_auto.series[1].addPoint([x, y2], true, false, true);
+            chartADC_auto.series[0].addPoint([x, y], true, false, true);
         }
     });
 
-    // Reference to the acetone setpoint value in the database
-    const acetoneSetpointRef = database.ref('control/acetoneSetpoint');
+    // Reference to the setpoint value in the database
+    const setpointRef = database.ref('control/setpoint');
     
-    // Listen for acetone setpoint value changes
-    acetoneSetpointRef.on('value', (snapshot) => {
-        const acetoneSetpoint = snapshot.val().setpoint;
-        document.getElementById('currentSetPoint').innerText = acetoneSetpoint.toFixed(2);
-        chartADC_auto.yAxis[0].removePlotLine('acetone-setpoint-line');
+    // Listen for setpoint value changes
+    setpointRef.on('value', (snapshot) => {
+        const setpoint = snapshot.val().setpoint;
+        document.getElementById('currentSetPoint').innerText = setpoint.toFixed(2);
+        chartADC_auto.yAxis[0].removePlotLine('setpoint-line');
         chartADC_auto.yAxis[0].addPlotLine({
-            id: 'acetone-setpoint-line',
-            value: acetoneSetpoint,
+            id: 'setpoint-line',
+            value: setpoint,
             color: 'red',
             dashStyle: 'Dash',
             width: 2,
             label: {
-                text: 'Acetone Setpoint: ' + acetoneSetpoint.toFixed(2) + '°C',
+                text: 'Setpoint: ' + setpoint.toFixed(2) + '°C',
                 align: 'right',
-                verticalAlign: 'bottom',
+                verticalAlign: 'bottom', // Set the vertical alignment to bottom
                 style: {
                     color: 'red'
-                }
-            }
-        });
-    });
-
-    // Reference to the heater setpoint value in the database
-    const heaterSetpointRef = database.ref('control/heaterSetpoint');
-    
-    // Listen for heater setpoint value changes
-    heaterSetpointRef.on('value', (snapshot) => {
-        const heaterSetpoint = snapshot.val().setpoint;
-        chartADC_auto.yAxis[0].removePlotLine('heater-setpoint-line');
-        chartADC_auto.yAxis[0].addPlotLine({
-            id: 'heater-setpoint-line',
-            value: heaterSetpoint,
-            color: 'blue',
-            dashStyle: 'Dash',
-            width: 2,
-            label: {
-                text: 'Heater Setpoint: ' + heaterSetpoint.toFixed(2) + '°C',
-                align: 'right',
-                verticalAlign: 'bottom',
-                style: {
-                    color: 'blue'
                 }
             }
         });
@@ -162,8 +133,6 @@ function init() {
     show('home');
 }
 
-
-
 // Function to format time from seconds to hh:mm:ss
 function formatTime(seconds) {
     const hours = Math.floor(seconds / 3600);
@@ -182,17 +151,13 @@ function setTime() {
 }
 
 // Highcharts configuration for ADC auto chart
-var colors = ['#470ce8', '#e80c47']; // Existing colors for the series
+var colors = ['#470ce8'];
 var chartADC_auto = new Highcharts.Chart({
     chart: { renderTo: 'chart-ADC_auto' },
     title: { text: 'Temperature Control' },
     series: [{
         data: [],
         name: 'Heater Temperature'
-    },
-    {
-        data: [],
-        name: 'Acetone Temperature'
     }],
     colors: colors,
     plotOptions: {
@@ -207,41 +172,23 @@ var chartADC_auto = new Highcharts.Chart({
         title: { text: 'Temperature [°C]' },
         min: 10,
         max: 50,
-        plotLines: [
-            {
-                id: 'acetone-setpoint-line',
-                color: 'red',
-                dashStyle: 'Dash',
-                width: 2,
-                label: {
-                    text: 'Acetone Setpoint',
-                    align: 'right',
-                    verticalAlign: 'bottom',
-                    style: {
-                        color: 'red'
-                    }
-                }
-            },
-            {
-                id: 'heater-setpoint-line',
-                color: 'blue',
-                dashStyle: 'Dash',
-                width: 2,
-                label: {
-                    text: 'Heater Setpoint',
-                    align: 'right',
-                    verticalAlign: 'bottom',
-                    style: {
-                        color: 'blue'
-                    }
+        plotLines: [{
+            id: 'setpoint-line',
+            color: 'red',
+            dashStyle: 'Dash',
+            width: 2,
+            label: {
+                text: 'Setpoint',
+                align: 'right',
+                verticalAlign: 'bottom', // Set the vertical alignment to bottom
+                style: {
+                    color: 'red'
                 }
             }
-        ]
+        }]
     },
     credits: { enabled: false }
 });
-
-
 
 function btn_control(action) {
     const control = action === 'control-start' ? true : false;
