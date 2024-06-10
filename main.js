@@ -85,7 +85,7 @@ function init() {
         console.log('Connected to MQTT broker');
         mqttClient.subscribe('pp_heater_temp');
         mqttClient.subscribe('pp_acetone_temp');
-        mqttClient.subscribe('pp_stop');
+        mqttClient.subscribe('pp_time');
         mqttClient.subscribe('pp_sp_heater');
         mqttClient.subscribe('pp_sp_acetone');
     });
@@ -106,32 +106,51 @@ function init() {
             const formattedTime = formatTime(time);
             document.getElementById('timeLeft').innerText = formattedTime;
             document.getElementById('controlTimeLeft').innerText = formattedTime;
-        }
-    });
-
-    // Reference to the setpoint value in the database
-    const setpointRef = database.ref('control/setpoint');
-    
-    // Listen for setpoint value changes
-    setpointRef.on('value', (snapshot) => {
-        const setpoint = snapshot.val().setpoint;
-        document.getElementById('currentSetPoint').innerText = setpoint.toFixed(2);
-        chartADC_auto.yAxis[0].removePlotLine('setpoint-line');
-        chartADC_auto.yAxis[0].addPlotLine({
-            id: 'setpoint-line',
-            value: setpoint,
-            color: 'red',
-            dashStyle: 'Dash',
-            width: 2,
-            label: {
-                text: 'Setpoint: ' + setpoint.toFixed(2) + '°C',
-                align: 'right',
-                verticalAlign: 'bottom', // Set the vertical alignment to bottom
-                style: {
-                    color: 'red'
+        } else if (topic === 'pp_sp_acetone') {
+            const setpoint = parseFloat(message.toString());
+            chartADC_auto.yAxis[0].removePlotLine('setpoint-line');
+            chartADC_auto.yAxis[0].addPlotLine({
+                id: 'setpoint-line',
+                value: setpoint,
+                color: 'red',
+                dashStyle: 'Dash',
+                width: 2,
+                label: {
+                    text: 'Setpoint: ' + setpoint.toFixed(2) + '°C',
+                    align: 'right',
+                    verticalAlign: 'bottom', // Set the vertical alignment to bottom
+                    style: {
+                        color: 'red'
+                    }
                 }
+            });
+        } else if (topic === 'pp_heater_temp') {
+            const heaterTemp = parseFloat(message.toString());
+            var x = (new Date()).getTime(), y = heaterTemp;
+            if (chartADC_heater.series[0].data.length > 40) {
+                chartADC_heater.series[0].addPoint([x, y], true, true, true);
+            } else {
+                chartADC_heater.series[0].addPoint([x, y], true, false, true);
             }
-        });
+        } else if (topic === 'pp_sp_heater') {
+            const setpoint = parseFloat(message.toString());
+            chartADC_heater.yAxis[0].removePlotLine('setpoint-line');
+            chartADC_heater.yAxis[0].addPlotLine({
+                id: 'setpoint-line',
+                value: setpoint,
+                color: 'red',
+                dashStyle: 'Dash',
+                width: 2,
+                label: {
+                    text: 'Setpoint: ' + setpoint.toFixed(2) + '°C',
+                    align: 'right',
+                    verticalAlign: 'bottom', // Set the vertical alignment to bottom
+                    style: {
+                        color: 'red'
+                    }
+                }
+            });
+        }
     });
 
     show('home');
@@ -158,7 +177,7 @@ function setTime() {
 var colors = ['#470ce8'];
 var chartADC_auto = new Highcharts.Chart({
     chart: { renderTo: 'chart-ADC_auto' },
-    title: { text: 'Temperature Control' },
+    title: { text: 'Acetone Temperature Control' },
     series: [{
         data: [],
         name: 'Acetone Temperature'
@@ -167,6 +186,45 @@ var chartADC_auto = new Highcharts.Chart({
     plotOptions: {
         line: { animation: false, dataLabels: { enabled: true } },
         pie: { colors: colors }
+    },
+    xAxis: {
+        type: 'datetime',
+        dateTimeLabelFormats: { second: '%H:%M:%S' }
+    },
+    yAxis: {
+        title: { text: 'Temperature [°C]' },
+        min: 10,
+        max: 50,
+        plotLines: [{
+            id: 'setpoint-line',
+            color: 'red',
+            dashStyle: 'Dash',
+            width: 2,
+            label: {
+                text: 'Setpoint',
+                align: 'right',
+                verticalAlign: 'bottom', // Set the vertical alignment to bottom
+                style: {
+                    color: 'red'
+                }
+            }
+        }]
+    },
+    credits: { enabled: false }
+});
+
+// Highcharts configuration for Heater temperature chart
+var chartADC_heater = new Highcharts.Chart({
+    chart: { renderTo: 'chart-ADC_heater' },
+    title: { text: 'Heater Temperature Control' },
+    series: [{
+        data: [],
+        name: 'Heater Temperature'
+    }],
+    colors: ['#e8470c'],
+    plotOptions: {
+        line: { animation: false, dataLabels: { enabled: true } },
+        pie: { colors: ['#e8470c'] }
     },
     xAxis: {
         type: 'datetime',
