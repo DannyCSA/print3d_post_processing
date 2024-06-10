@@ -78,19 +78,34 @@ function init() {
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
     
-    // Reference to the temperature value in the database
-    const tempRef = database.ref('temperature');
-    
-    // Listen for temperature value changes
-    tempRef.on('value', (snapshot) => {
-        const temperature = snapshot.val().temperature;
-        document.getElementById('currentTemperature').innerText = temperature.toFixed(2);
+    // Connect to MQTT broker
+    const mqttClient = mqtt.connect('wss://test.mosquitto.org:8081');
 
-        var x = (new Date()).getTime(), y = parseFloat(temperature);
-        if (chartADC_auto.series[0].data.length > 40) {
-            chartADC_auto.series[0].addPoint([x, y], true, true, true);
-        } else {
-            chartADC_auto.series[0].addPoint([x, y], true, false, true);
+    mqttClient.on('connect', () => {
+        console.log('Connected to MQTT broker');
+        mqttClient.subscribe('pp_heater_temp');
+        mqttClient.subscribe('pp_acetone_temp');
+        mqttClient.subscribe('pp_stop');
+        mqttClient.subscribe('pp_sp_heater');
+        mqttClient.subscribe('pp_sp_acetone');
+    });
+
+    mqttClient.on('message', (topic, message) => {
+        if (topic === 'pp_acetone_temp') {
+            const acetoneTemp = parseFloat(message.toString());
+            document.getElementById('currentTemperature').innerText = acetoneTemp.toFixed(2);
+
+            var x = (new Date()).getTime(), y = acetoneTemp;
+            if (chartADC_auto.series[0].data.length > 40) {
+                chartADC_auto.series[0].addPoint([x, y], true, true, true);
+            } else {
+                chartADC_auto.series[0].addPoint([x, y], true, false, true);
+            }
+        } else if (topic === 'pp_time') {
+            const time = parseInt(message.toString(), 10);
+            const formattedTime = formatTime(time);
+            document.getElementById('timeLeft').innerText = formattedTime;
+            document.getElementById('controlTimeLeft').innerText = formattedTime;
         }
     });
 
@@ -117,17 +132,6 @@ function init() {
                 }
             }
         });
-    });
-
-    // Reference to the time value in the database
-    const timeRef = database.ref('time/time');
-    
-    // Listen for time value changes
-    timeRef.on('value', (snapshot) => {
-        const time = snapshot.val();
-        const formattedTime = formatTime(time);
-        document.getElementById('timeLeft').innerText = formattedTime;
-        document.getElementById('controlTimeLeft').innerText = formattedTime;
     });
 
     show('home');
@@ -157,7 +161,7 @@ var chartADC_auto = new Highcharts.Chart({
     title: { text: 'Temperature Control' },
     series: [{
         data: [],
-        name: 'Heater Temperature'
+        name: 'Acetone Temperature'
     }],
     colors: colors,
     plotOptions: {
