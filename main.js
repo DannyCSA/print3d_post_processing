@@ -193,7 +193,7 @@ var chartADC_auto = new Highcharts.Chart({
     },
     yAxis: {
         title: { text: 'Temperature [°C]' },
-        min: 10,
+        min: 15,
         max: 50,
         plotLines: [{
             id: 'setpoint-line',
@@ -232,8 +232,8 @@ var chartADC_heater = new Highcharts.Chart({
     },
     yAxis: {
         title: { text: 'Temperature [°C]' },
-        min: 10,
-        max: 50,
+        min: 15,
+        max: 240,
         plotLines: [{
             id: 'setpoint-line',
             color: 'red',
