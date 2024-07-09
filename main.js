@@ -93,6 +93,19 @@ function init() {
         mqttClient.subscribe('pp_sp_acetone');
     });
 
+    function publishMessage() {
+        const topic = 'pp_sp_acetone';
+        const message = '45';
+        
+        if (mqttClient.connected) {
+            mqttClient.publish(topic, message, () => {
+                console.log(`Message "${message}" published to topic "${topic}"`);
+            });
+        } else {
+            console.log('MQTT client is not connected');
+        }
+    }
+
     mqttClient.on('message', (topic, message) => {
         if (topic === 'pp_acetone_temp') {
             const acetoneTemp = parseFloat(message.toString());
