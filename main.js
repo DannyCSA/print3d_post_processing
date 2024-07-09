@@ -285,7 +285,7 @@ function btn_emergency_stop() {
     firebase.database().ref('stop').set({ stop: true });
     mqttClient.send('pp_emergency_stop', true)
     const topic = 'pp_emergency_stop';
-    const message = true;
+    const message = 'true';
         
         if (mqttClient.connected) {
             mqttClient.publish(topic, message, () => {
