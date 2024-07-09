@@ -171,6 +171,8 @@ function setTime() {
     const seconds = parseInt(document.getElementById('timeInputSeconds').value) || 0;
     const totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
     
+    firebase.database().ref('time').set({ time: totalSeconds });
+
     mqttClient.on('connect', function () {
         console.log('Connected')
           if (!err) {
@@ -179,7 +181,6 @@ function setTime() {
         }
         })
 
-    firebase.database().ref('time').set({ time: totalSeconds });
 }
 
 // Highcharts configuration for ADC auto chart
