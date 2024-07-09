@@ -265,16 +265,10 @@ function btn_test(action) {
 
 function btn_emergency_stop() {
     firebase.database().ref('stop').set({ stop: true });
-    mqttClient.on('connect', function () {
-        console.log('Connected')
-        // Subscribe to a topic
-        mqttClient.subscribe('pp_emergency_stop', function (err) {
-          if (!err) {
-            // Publish a message to a topic
-            mqttClient.publish('pp_emergency_stop', '1')
-          }
-        })
-      })
+
+    mqttClient.on('connect', () => {
+        mqttClient.publish('pp_emergency_stop', '1')
+    });
 }
 
 window.onload = init;
