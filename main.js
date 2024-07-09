@@ -270,7 +270,7 @@ function btn_test(action) {
 
 function btn_emergency_stop() {
     firebase.database().ref('stop').set({ stop: true });
-    mqttClient.publish('pp_emergency_stop', true)
+    mqttClient.send('pp_emergency_stop', true)
 }
 
 window.onload = init;
