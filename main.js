@@ -2,7 +2,6 @@ const sideMenu = document.querySelector("aside");
 const menuBtn = document.querySelector("#menu-btn");
 const closeBtn = document.querySelector("#close-btn");
 const themeToggler = document.querySelector(".theme-toggler");
-const mqtt = require('mqtt')
 
 // Page sections
 const home = document.querySelector(".home");
@@ -84,18 +83,7 @@ function init() {
     
     // Connect to MQTT broker
     const mqttClient = mqtt.connect('wss://test.mosquitto.org:8081');
-    const url = 'wss://test.mosquitto.org:8081'
-
-    const options = {
-        // Clean session
-        clean: true,
-        connectTimeout: 4000,
-      }
-      const client  = mqtt.connect(url, options)
-      client.on('connect', function () {
-        console.log('Connected')
-      })
-
+    
     mqttClient.on('connect', () => {
         console.log('Connected to MQTT broker');
         mqttClient.subscribe('pp_heater_temp');
@@ -187,12 +175,6 @@ function setTime() {
     const totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
     firebase.database().ref('time').set({ time: totalSeconds });
     mqttClient.publish('pp_time', totalSeconds)
-    client.subscribe('pp_time', function (err) {
-        if (!err) {
-          // Publish a message to a topic
-          client.publish('pp_time', String(totalSeconds))
-        }
-    })
 }
 
 // Highcharts configuration for ADC auto chart
