@@ -268,7 +268,5 @@ function btn_emergency_stop() {
     mqttClient.publish('pp_emergency_stop', '1');
     // Update Firebase with the STOP action
     firebase.database().ref('stop').set({ stop: true });
-
 }
-
 window.onload = init;
