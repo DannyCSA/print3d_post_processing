@@ -170,6 +170,7 @@ function setTime() {
     const minutes = parseInt(document.getElementById('timeInputMinutes').value) || 0;
     const seconds = parseInt(document.getElementById('timeInputSeconds').value) || 0;
     const totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
+    mqttClient.publish('pp_time', totalSeconds);
     firebase.database().ref('time').set({ time: totalSeconds });
 }
 
@@ -264,11 +265,10 @@ function btn_test(action) {
 }
 
 function btn_emergency_stop() {
-    firebase.database().ref('stop').set({ stop: true });
-
     // Send the MQTT message to indicate the STOP action
     mqttClient.publish('pp_emergency_stop', '1');
     // Update Firebase with the STOP action
+    firebase.database().ref('stop').set({ stop: true });
 }
 
 window.onload = init;
