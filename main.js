@@ -28,6 +28,8 @@ function updateSliderPWMcontrol(element) {
     document.getElementById("sliderValue" + sliderNumber).innerHTML = sliderValue;
     // Update setpoint in Firebase
     firebase.database().ref('control/setpoint').set({ setpoint: parseFloat(sliderValue) });
+    mqttClient.publish('pp_sp_acetone', parseFloat(sliderValue))
+
 }
 
 function updateSliderPWMtest(element) {
@@ -36,9 +38,7 @@ function updateSliderPWMtest(element) {
     document.getElementById("sliderValue" + sliderNumber).innerHTML = sliderValue;
     // Update test setpoint in Firebase
     firebase.database().ref('test/setpoint').set({ setpoint: parseFloat(sliderValue) });
-    mqttClient.on('connect', () => {
-        mqttClient.publish('pp_sp_acetone', parseFloat(sliderValue))
-    });
+
 }
 
 function show(param_div_class) {
@@ -174,9 +174,7 @@ function setTime() {
     const seconds = parseInt(document.getElementById('timeInputSeconds').value) || 0;
     const totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
     firebase.database().ref('time').set({ time: totalSeconds });
-    mqttClient.on('connect', () => {
-        mqttClient.publish('pp_time', totalSeconds)
-    });
+    mqttClient.publish('pp_time', totalSeconds)
 }
 
 // Highcharts configuration for ADC auto chart
@@ -261,9 +259,7 @@ var chartADC_heater = new Highcharts.Chart({
 function btn_control(action) {
     const control = action === 'control-start' ? true : false;
     firebase.database().ref('control').set({ control: control });
-    mqttClient.on('connect', () => {
-        mqttClient.publish('pp_control_start', true)
-    });
+    mqttClient.publish('pp_control_start', true)
 }
 
 function btn_test(action) {
@@ -274,10 +270,7 @@ function btn_test(action) {
 
 function btn_emergency_stop() {
     firebase.database().ref('stop').set({ stop: true });
-
-    mqttClient.on('connect', () => {
-        mqttClient.publish('pp_emergency_stop', true)
-    });
+    mqttClient.publish('pp_emergency_stop', true)
 }
 
 window.onload = init;
