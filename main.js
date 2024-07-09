@@ -284,6 +284,16 @@ function btn_test(action) {
 function btn_emergency_stop() {
     firebase.database().ref('stop').set({ stop: true });
     mqttClient.send('pp_emergency_stop', true)
+    const topic = 'pp_emergency_stop';
+    const message = true;
+        
+        if (mqttClient.connected) {
+            mqttClient.publish(topic, message, () => {
+                console.log(`Message "${message}" published to topic "${topic}"`);
+            });
+        } else {
+            console.log('MQTT client is not connected');
+        }
 }
 
 window.onload = init;
